@@ -18,7 +18,7 @@ bool isValid(vector<bool> &check, int n){
     return false;
 }
 
-void initailize(vector<bool> &check, int n){
+void initailizeCheck(vector<bool> &check, int n){
     for(int i = 0; i< n; i++) {
         check[i] = false;
     }
@@ -53,13 +53,11 @@ int picnic(vector< vector<int> > &pairs, int n){
             if ( check[pairs[j][0]] == true || check[pairs[j][1]] == true ) {
                 continue;
             }
-
             if ( check[pairs[j][0]] == false && selected.find(j) == selected.end()) {
                 check[pairs[j][0]] = true;
             } else {
                 continue;
             }
-
             if ( check[pairs[j][1]] == false && selected.find(j) == selected.end() ) {
                 check[pairs[j][1]] = true;
             } else {
@@ -69,15 +67,18 @@ int picnic(vector< vector<int> > &pairs, int n){
             //if ( check[pairs[j][0]] && check[pairs[j][1]] )
                 tempSelected.insert(j);
 
-
             if ( isValid(check, n) ) {
                 cnt++;
                 for( iter = tempSelected.begin(); iter != tempSelected.end(); ++iter){
                     selected.insert(*iter);
                 }
                 tempSelected.clear();
-                initailize(check, n);
+                initailizeCheck(check, n);
                 j = i+1;                // 다시 처음부터 검사
+            } else {
+                if ( j == pairs.size()-1 ){
+                    tempSelected.clear();
+                }
             }
         }
     }
@@ -91,7 +92,7 @@ int main(){
 
     scanf("%d", &caseNum);
     for (int i = 0; i < caseNum; i++) {
-        scanf("%d %d", &n, &m);
+        scanf("%d%d", &n, &m);
         vector< vector<int> > pairs(m, vector<int>(2, 0));
 
         for (int row = 0; row < m; row++) {
