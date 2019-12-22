@@ -33,7 +33,7 @@ int solve(int switchNum, int nowCount, int sum, vector<int>& clocks) {
 		int clock = 0;
 
 		while (SWITCH[switchNum][clock] != -1) {
-			clocks[SWITCH[switchNum][clock]] = clocks[SWITCH[switchNum][clock]] + 3;
+			clocks[SWITCH[switchNum][clock]] += 3;
 			clock++;
 		}
 	}
