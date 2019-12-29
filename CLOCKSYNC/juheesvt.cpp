@@ -4,7 +4,9 @@
 
 using namespace std;
 
+const int SWITCH_NUM = 10;
 const int CLOCK_NUM = 16;
+const int INF = 99999;
 
 
 vector< vector<int> > button({
@@ -20,50 +22,38 @@ vector< vector<int> > button({
     vector<int>( { 3, 4, 5, 9, 13 })
 });
 
-
-int clockSyn(int clock[], int currentButton, int currentButtonCount, int totalCount) {
-
-
-    // TODO : 시계 돌린거 다시 초기화 해줘야댐
+void tictoc(int clock[], int currentButton) {           //  시계 돌리기
     
-    if (currentButton == 10)    return -1;
-    //  시계 돌리기
     for (int i = 0; i < button[currentButton].size(); i++) {
-        for (int _current_button_count = 0; _current_button_count < currentButtonCount; _current_button_count++) {
-            if (clock[button[currentButton][i]] == 12) {
-                clock[button[currentButton][i]] = 3;
-            }
-            else {
-                clock[button[currentButton][i]] += 3;
-            }
+        if (clock[button[currentButton][i]] == 12) {
+            clock[button[currentButton][i]] = 3;
         }
-    } 
+        else {
+            clock[button[currentButton][i]] += 3;
+        }
+    }
+}
 
-    // 기저조건
-    bool isAll = true;
+bool isAllTwelve(const int clock[]) {
     for (int _clock = 0; _clock < CLOCK_NUM; _clock++) {
         if (clock[_clock] != 12) {
-            isAll = false;
-            break;
+            return false;
         }
     }
+    return true;
 
-    if (isAll) {
-        return totalCount;  // 버튼 9까지 안내려가고 리턴해도되나 ?
-    } else {
-        if (currentButton == 9 && currentButtonCount == 3) {
-            return -1;
-        }
-    }
-    int minn = 99999;
+}
+int clockSyn(int clock[], int currentButton) {
+
+    if (currentButton == SWITCH_NUM)    return isAllTwelve(clock) ? 0 : INF;
+    
+    int minn = INF;
     for (int _current_button_count = 0; _current_button_count < 4; _current_button_count++) {
-        minn = min(clockSyn(clock, currentButton + 1, _current_button_count, totalCount + _current_button_count), minn);
-
+        minn = min(_current_button_count + clockSyn(clock, currentButton + 1), minn);
+        tictoc(clock, currentButton);
     }
 
     return minn;
-
-
 }
 
 int main() {
@@ -75,7 +65,13 @@ int main() {
         for (int _clock = 0; _clock < CLOCK_NUM; _clock++) {
             scanf("%d", &clock[_clock]);
         }
-        printf("%d\n", clockSyn(clock, 0, 0, 0));
+        int result = clockSyn(clock, 0);
+        if  (result == INF) {
+            printf("%d\n", -1);
+        }
+        else {
+            printf("%d\n", result);
+        }
     }
 
     return 0;
