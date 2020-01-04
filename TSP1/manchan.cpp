@@ -10,8 +10,6 @@ double road(int current,double ret,vector<int> check);
 int  main(){
     int cases;
     cin>>cases;
-    cout.setf(ios::fixed); 
-    cout.precision(10);
     while(cases--){
         int sizes;
         cin>>sizes;
@@ -22,8 +20,7 @@ int  main(){
                 cin>> relation[row][col];
             }
         }
-        double ans =0;
-          printf("%.10lf\n", road(0, 0, check));
+        printf("%.10lf\n", road(0, 0, check));
     }
 }
 
