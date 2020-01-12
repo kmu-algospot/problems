@@ -14,8 +14,7 @@ int main(){
 }
 
 string make(string input,string ans){
-    int current_length = input.length();
-    int idx =0;
+        int idx =0;
         if(input[idx] == 'x'){
             string v1,v2,v3,v4;
 
