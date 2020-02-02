@@ -93,21 +93,12 @@ void addTo(vector<int>& a, const vector<int>& b, int k){
     }
     normalize(a);
 }
-
 void subFrom(vector<int>& a, const vector<int>& b){
 
-    for (int i = 0; i < a.size(); i++) {
+    a.resize(max(a.size(), b.size()) + 1);
+    for (int i = 0; i < b.size(); i++) {
         a[i] -= b[i];
-        normalize(a);
     }
+    normalize(a);
 }
 
-int main(){
-
-    vector<int> a = { 0,0,0,0,0,0,0,1}, b = { 0,0,0,0,0,0,0,1 };
-    vector<int> ret = karatsuba(a,b);
-
-    for ( int i = ret.size(); i > 0; i--){
-        cout << ret[i];
-    }
-}
