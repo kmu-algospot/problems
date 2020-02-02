@@ -5,17 +5,22 @@
 using namespace std;
 
 void addTo(vector<int>& a, const vector<int>& b, int k){
+
     a.resize(max(a.size(), b.size() + k));
+
     for (int i = 0; i < b.size(); i++) {
         a[i+k] += b[i];
     }
 }
 void subFrom(vector<int>& a, const vector<int>& b) {
+
     a.resize(max(a.size(), b.size()) + 1);
+
     for (int i = 0; i < b.size(); i++) {
         a[i] -= b[i];
     }
 }
+
 
 vector<int> multiply(const vector<int>& a, const vector<int>& b) {
     int as = a.size();
@@ -64,33 +69,48 @@ vector<int> karatsuba(const vector<int>& a, const vector<int> & b){
     
     return ret;
 }
-vector<int>* toVector(string str,bool isReverse){
+vector<int> toVector(string str,bool isReverse){
+    vector<int> ret;
     int ss = str.size();
-    vector<int> *ret = new vector<int>(ss,0);
+    ret.reserve(ss);
     for(int i = 0; i<ss;++i){
-        if(isReverse){
-            (*ret)[ss-i-1] = str[i]== 'M';
-        }
-        else{
-            (*ret)[i] = str[i] == 'M';
-        }
+        if(isReverse)
+            ret.push_back(str[i] == 'M');
+        else
+            ret.insert(ret.begin(),str[i]=='M');
     }
     return ret;
 }
-int main(){
-    int C;
-    cin >> C;
-    while(C--){
-        string member;
-        string fan;
-        cin >> member;
-        cin >> fan;
-        vector<int> *fans = toVector(fan,false);
-        vector<int> *members = toVector(member,true);
-        
-        vector<int> ret = karatsuba(*fans,*members);
-        cout << count(ret.begin()+member.size()-1,ret.begin()+fan.size(),0) << endl;
-        
+int fanMeeting(const string& idol, const string& fan) {
+
+    int cnt = 0;
+    vector<int> idolInt(idol.size()), fanInt(fan.size());
+
+    for (int i = 0; i < idol.size(); i++) {
+        idolInt[i] = (idol[i] == 'M');
     }
-    return 0;
+
+    // 팬은 뒤에서 부터 입력받아야댐
+    for (int i = 0; i < fan.size(); i++) {
+        fanInt[fan.size()-i-1] = (fan[i] == 'M');
+    }
+
+    vector<int> hug = karatsuba(idolInt, fanInt);
+
+    for ( int i = idol.size() - 1; i < fan.size(); i++) {
+        if (hug[i] == 0)       cnt++;
+    }
+    return cnt;
+}
+
+int main() {
+
+    int testCase;
+    scanf("%d", &testCase);
+
+    string idol, fan;
+    while(testCase--) {
+        cin >> idol >> fan;
+        cout << fanMeeting(idol, fan) << endl;
+    }
 }
