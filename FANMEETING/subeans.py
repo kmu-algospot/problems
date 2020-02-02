@@ -27,7 +27,7 @@ def hugcount(m,f):
 def replaceMF(m,f):
     mem=[]
     fan=[]
-    # 멤버를 2진수로 변환. 남자는 1, 여자는 0
+    # 멤버를 2진수로 변환. 남자는 0, 여자는 1
     for i in range(len(m)):
         if (m[i]=="F"):
             mem.append(1)
