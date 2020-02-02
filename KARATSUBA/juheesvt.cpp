@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void addTo(vector<int>& a, const vector<int>& b, int k);
+void addTo(vector<int>& a, vector<int>& b, int k);
 void subFrom(vector<int>& a, const vector<int>& b);
 vector<int> multiply(const vector<int>& a, const vector<int>& b);
 void normalize(vector<int>& num);
@@ -21,10 +21,10 @@ vector<int> karatsuba( const vector<int>& a, const vector<int>& b) {
     if (an < bn)   return karatsuba(b,a);
 
     // 기저 사례 1) a나 b가 비어있는 경우
-    if (an == 0 || bn ==0) return vector<int>();
+    if (an == 0 || bn == 0) return vector<int>();
 
     // 기저 사례 2) a가 비교적 짧을 경우 O(n^2) 알고리즘으로 변경
-    if (an < 50)    return multiply(a,b);
+    if (an <= 50)    return multiply(a,b);
 
     int half = an / 2;
 
@@ -64,7 +64,7 @@ void normalize(vector<int>& num){
         }
         else {
             num[i+1] += num[i] / 10;
-            num[i] = num[i] % 10;
+            num[i] %= 10;
         }
     }
     while (num.size() > 1 && num.back() == 0) num.pop_back();
@@ -84,33 +84,30 @@ vector<int> multiply(const vector<int>& a, const vector<int>& b){
 }
 
 
-void addTo(vector<int>& a, const vector<int>& b, int k){
+void addTo(vector<int>& a, vector<int>& b, int k){
 
-    for (int i = 0; i < a.size(); i++) {
-        a[i] += (b[i] << k);
-        if (a[i] > 10){
-            a[i+1] += a[i] / 10;
-            a[i] %= 10;
-        }
+    for (int i = 0; i < k; i++){
+        b.insert(b.begin(),0);
     }
+    for (int i = 0; i < a.size(); i++) {
+        a[i] += b[i];
+    }
+    normalize(a);
 }
 void subFrom(vector<int>& a, const vector<int>& b){
 
     for (int i = 0; i < a.size(); i++) {
         a[i] -= b[i];
-        if( a[i] < 0) {
-            a[i] += 9;
-            a[i+1] -= 1;
-        }
+        normalize(a);
     }
 }
 
 int main(){
 
-    vector<int> a = { 3, 2, 1}, b = { 6, 5, 4 };
+    vector<int> a = { 0,0,0,0,0,0,0,1}, b = { 0,0,0,0,0,0,0,1 };
     vector<int> ret = karatsuba(a,b);
 
-    for ( int i = 0; i < ret.size(); i++){
+    for ( int i = ret.size(); i > 0; i--){
         cout << ret[i];
     }
 }
