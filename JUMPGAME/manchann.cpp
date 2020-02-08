@@ -1,22 +1,24 @@
 #include <iostream>
+#include <cstring>
 using namespace std;
 
-
+int size;
 int board[101][101] ={-1};
-bool jumpgame(int x,int y,int size);
+int cache[101][101];
+int32_t jumpgame(int x,int y);
 
 int main(){
     int cases;
     cin>> cases;
     while(cases--){
-        int size;
+        memset(cache,-1,sizeof(cache));
         cin>>size;
         for(int x =0; x<size;x++){
             for(int y =0; y<size;y++){
                 cin>> board[x][y];
             }
         }
-        if(jumpgame(0,0,size) == true){
+        if(jumpgame(0,0) == true){
             cout<< "YES"<<"\n";
         } else{
             cout<<"NO" <<"\n";
@@ -24,10 +26,12 @@ int main(){
     }
 }
 
-bool jumpgame(int x,int y,int size){
+int jumpgame(int x,int y){
     if(x >=size || y>=size)
         return false;
-    if(board[x][y] == 0)
+    if(x == size-1 && y == size-1)
         return true;
-    return jumpgame(x+board[x][y],y,size) || jumpgame(x,y+board[x][y],size);
+    int& ret = cache[x][y];
+    if(ret != -1) return ret;
+    return jumpgame(x+board[x][y],y) || jumpgame(x,y+board[x][y]);
 }
