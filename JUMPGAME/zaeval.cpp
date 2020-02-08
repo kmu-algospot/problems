@@ -1,19 +1,41 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 int n,board[100][100];
-int cache [100] [100];
+int cache [100][100];
+class Pos{
+public:
+    int x;
+    int y;
+    Pos(int x,int y){
+        this->x = x;
+        this->y = y;
+    }
+};
 int jump2(int y, int x) {
-// 기저사례처리
-    if(y >= n || x >= n) return 0;
-    if(y == n-1 && x == n-1) return 1; // 메모이제이션
-    
-    int& ret = cache[y][x];
-    
-    if(ret != -1) return ret;
-    
-    int jumpSize = board[y][x];
-    
-    return ret = (jump2(y + jumpSize, x) || jump2(y, x + jumpSize));
+    queue<Pos *> q;
+    q.push(new Pos(x,y));
+    while(!q.empty()){
+        Pos *now = q.front();
+        q.pop();
+        cache[now->y][now->x] = 1;
+        int jumpValue = board[now->y][now->x];
+        for(int i = 0;i<n;++i){
+            for(int j = 0; j<n;++j){
+                cout<<(cache[i][j]==1)<<" ";
+            }
+            cout<<endl;
+        }
+        cout<<endl;
+        if(now->y + jumpValue < n && cache[now->y+jumpValue][now->x] == -1){
+            q.push(new Pos(now->x,now->y+jumpValue));
+        }
+        if(now->x + jumpValue < n && cache[now->y][now->x+jumpValue] == -1){
+            q.push(new Pos(now->x+jumpValue,now->y));
+        }
+        delete now;
+    }
+    return cache[n-1][n-1] == 1;
 }
 int main(){
     int C;
