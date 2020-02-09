@@ -5,7 +5,7 @@ using namespace std;
 int size;
 int board[101][101] ={-1};
 int cache[101][101];
-int32_t jumpgame(int x,int y);
+int jumpgame(int x,int y);
 
 int main(){
     int cases;
@@ -28,9 +28,9 @@ int main(){
 
 int jumpgame(int x,int y){
     if(x >=size || y>=size)
-        return false;
+        return 0;
     if(x == size-1 && y == size-1)
-        return true;
+        return 1;
     int& ret = cache[x][y];
     if(ret != -1) return ret;
     return jumpgame(x+board[x][y],y) || jumpgame(x,y+board[x][y]);
