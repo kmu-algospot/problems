@@ -33,5 +33,5 @@ int jumpgame(int x,int y){
         return 1;
     int& ret = cache[x][y];
     if(ret != -1) return ret;
-    return jumpgame(x+board[x][y],y) || jumpgame(x,y+board[x][y]);
+    return ret = jumpgame(x+board[x][y],y) || jumpgame(x,y+board[x][y]);
 }
