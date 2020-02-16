@@ -1,23 +1,30 @@
-
 def wildCard_(pattern, word):
     len_p, len_w = len(pattern), len(word)
-    nth = 0
-    # 확인할 문자의 위치 변수. 0으로 초기화
-    while ( nth < len_p and nth < len_w and (pattern[nth] == '?' or pattern[nth] == word[nth])):
-        nth += 1
+    cache = [[-1 for i in range(len_w+1)] for i in range(len_p+1)]
 
-    if len_p == nth:
-        return nth == len_w
+    def match(index_p, index_w):
+        if (cache[index_p][index_w] != -1):
+            return cache[index_p][index_w]
 
-    if pattern[nth] == '*':
-        skip = 0
-        while (skip + nth <= len_w): # "*" 의 pattern 일때 빈 문자열인경우도 고려
-            #"*"의 다음부터 자른 패턴과, 그 시점 이후로의 word
-            if (wildCard_(pattern[nth+1:], word[skip+nth:])):
-                #패턴의 남은 문자열과 word의 나머지 부분이 맞는지 확인하려고 재귀사용
+        if (index_p < len_p and index_w < len_w and (pattern[index_p] == '?' or pattern[index_p] == word[index_w])):
+            cache[index_p][index_w] = match(index_p+1, index_w+1)
+            return cache[index_p][index_w]  #캐시값 채우고 반환
+
+        if (index_p == len_p):
+            return index_w == len_w
+
+        if pattern[index_p] == '*':
+            if match(index_p+1, index_w) or (index_w < len_w and match(index_p, index_w+1)):
+                # pattern의 '*' 다음글자와 word를 비교한 값 or word의 길이가 끝나지 않았을 때 '*'과 word 글자 비교
+                cache[index_p][index_w] = True # 이부분은 따로 값을 저장하지 않고 계산했음을 뜻하는 true로//
                 return True
-            skip+=1
 
+        #cache[index_p][index_w] = False
+        else:
+            return False
+
+
+    return match(0, 0)
 
 c= int(input())
 for i in range(c):
@@ -26,8 +33,8 @@ for i in range(c):
     wildcard = []
     for j in range(t):
         s = input()
+        #print(wildCard_(pattern,s))
         if(wildCard_(pattern,s)):
             wildcard.append(s)
     wildcard.sort #print(wildcard.sort) 했었는데 sort()기능은 리턴값이 없음
     print(wildcard)
-
