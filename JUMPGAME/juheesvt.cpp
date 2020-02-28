@@ -1,48 +1,53 @@
+//
+// Created by juheeSVT on 2020-02-29.
+// 메모이제이션 실패
 
 #include <iostream>
-#include <string.h>
-
-using namespace std;
-
+#include <algorithm>
 
 const int MAX = 100;
 int map[MAX][MAX];
 int cache[MAX][MAX];
 
-int jumpGame(int y, int x, int mapSize) {
+int triangle(int r, int c, int sum,int triangleSize) {
 
-	if (y >= mapSize || x >= mapSize)
-		return 0;
+    int localSum = sum;
 
-	if (y == mapSize-1 && x == mapSize-1)
-		return 1;
+    localSum += map[r][c];
 
-	if (cache[y][x] != -1)
-		return cache[y][x];
+    if ( r == triangleSize - 1 )
+        return localSum;
 
-	int jump = map[y][x];
+    // 캐시하는 부분이 잘못됨. 똑같은 위치라도 위에서 내려온 경로에 따라 다르게 저장해야함
+    if ( cache[r][c] != -1 )
+        return cache[r][c];
 
-	return cache[y][x] = (jumpGame(y + jump, x, mapSize) || jumpGame(y, x + jump, mapSize));
+    return cache[r][c] = std::max(triangle(r+1, c, localSum, triangleSize), triangle(r+1, c+1, localSum, triangleSize));
+
 }
 
-int main() {
+int main(){
 
-	int testCase, mapSize;
+    int testCase, triangleSize;
 
-	scanf("%d", &testCase);
+    scanf("%d", &testCase);
 
-	while (testCase--) {
-		
-		memset(cache, -1, sizeof(cache));
-		scanf("%d", &mapSize);
-		for (int r = 0; r < mapSize; r++) {
-			for (int c = 0; c < mapSize; c++) {
-				scanf("%d", &map[r][c]);
-			}
-		}
-		if (jumpGame(0, 0, mapSize))
-			printf("YES\n");
-		else
-			printf("NO\n");
-	}
+    while(testCase--) {
+        scanf("%d", &triangleSize);
+
+        for (int i = 0; i < triangleSize; i++) {
+            for (int j = 0; j <=i ; j++) {
+                scanf("%d", &map[i][j]);
+            }
+        }
+
+        for (int i = 0; i < triangleSize; i++ ) {
+            for (int j = 0; j <= i; j++ ) {
+                cache[i][j] = -1;
+            }
+        }
+
+        printf("%d\n", triangle(0,0,0,triangleSize));
+
+    }
 }
