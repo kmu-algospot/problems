@@ -2,12 +2,10 @@
 // Created by juheeSVT on 2020-02-29.
 //
 
-// IDE 에서 답 잘 나오는데 채점서버에서 런타임 에러
-// RTE (SIGSEGV: segmentation fault, probably incorrect memory access or stack overflow)
-
 #include <iostream>
 
-const int MAX = 50;
+// 수열의 최대 크기는 500임
+const int MAX = 500;
 
 int main() {
 
@@ -30,7 +28,7 @@ int main() {
         for (int i = 1; i < subSequenceSize; i++ ) {
             localMax = 0;
             for ( int j = 0; j < i; j++ ) {
-                if ( subSequence[j] > localMax && sequence[j] < sequence [i]) {
+                if ( sequence[j] < sequence [i] && subSequence[j] > localMax  ) {
                     localMax = subSequence[j];
                 }
             }
