@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstring>
+#include <algorithm>
 using namespace std;
 
-const int MIN = -9999;
+const long long MIN = numeric_limits<long long>::min();
 const int MAX = 101;
 int A[100],B[100] = {0,};
 int cache[MAX][MAX] = {-1,};
@@ -38,9 +39,9 @@ int JLIS(int a, int b, int sizesA,int sizesB){
     int& ret = cache[a+1][b+1];
     if(ret != -1) return ret;
     ret = 0;
-    int aNum = (a == -1 ? MIN : A[a]);
-    int bNum =  (b == -1 ? MIN : B[b]);
-    int maxNum = max(aNum,bNum);
+    long long aNum = (a == -1 ? MIN : A[a]);
+    long long bNum =  (b == -1 ? MIN : B[b]);
+    long long maxNum = max(aNum,bNum);
     for(int i=a+1;i<sizesA;i++){
         if(maxNum < A[i] ){
             ret = max(ret,JLIS(i,b,sizesA,sizesB)+1);
