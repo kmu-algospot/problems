@@ -1,11 +1,13 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <cstring>
 using namespace std;
 
-const int Max = numeric_limits<long long>::max();
-int pi(string testcase,int size);
+const int Max = 99999999;
+int pi(string testcase,int size,int idx);
 int level(string testcase,int size);
+int cache[10001] = {-1,};
 
 int main(){
     int cases;
@@ -13,26 +15,31 @@ int main(){
     while(cases--){
         string testcase;
         cin>> testcase;
+        memset(cache,-1,sizeof(cache));
         int minValue =Max;
         for(int i=0; i<3;i++){
-            minValue = min(minValue,pi(testcase,i+3));
+            minValue = min(minValue,pi(testcase,i+3,0));
         }
         cout<<minValue<<"\n";
     }
     return 0;
 }
 
-int pi(string testcase,int size){
-    int ret = Max;
-    if(testcase.length()<3) return false;
+int pi(string testcase,int size,int idx){
+    int ret = cache[idx];
+    if(ret != -1) return ret;
+    ret = Max;
     for (int i = 0; i < 3; i++)
-        if(level(testcase,size)){
-            ret = min(ret, pi(testcase.substr(size),i) + level(testcase.substr(size), size));
+        if(level(testcase.substr(idx,i+3),i+3)){
+            if(idx+i+3 <=testcase.length()){
+                ret = min(ret, pi(testcase,i+3,idx+i+3) + level(testcase.substr(idx,i+3), i+3));
+            }
         }
     return ret;
 }
 
 int level(string testcase, int size){
+    if(testcase.length()<3) return false;
     int distence;
     bool isEqual = true;
     bool isSequence = true;
