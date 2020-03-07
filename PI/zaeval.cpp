@@ -5,8 +5,8 @@
 #include <map>
 using namespace std;
 const int MAX = 987654321;
-enum DIFFICULTY{SAME=1,INCREMENT=2, REPEAT=4,AP=5,ETC=10};
-int getCost(string &str) {
+enum DIFFICULTY { SAME = 1, INCREMENT = 2, REPEAT = 4, AP = 5, ETC = 10 };
+int getCost(string& str) {
 
 	int beforeGap = str[0] - str[1];
 	unsigned int i;
@@ -51,14 +51,14 @@ int getCost(string &str) {
 
 	return ETC;
 
-	
+
 }
-int pi(string &subStr,int nowIndex, vector<int>& cache) {
+int pi(string& subStr, int nowIndex, vector<int>& cache) {
 	if (cache[nowIndex] != MAX) {
-		cache[nowIndex];
+		return cache[nowIndex];
 	}
 	if (subStr.size() < 3) {
-		return MAX-1;
+		return MAX - 1;
 	}
 	for (int i = 3; i <= 5; ++i) {
 		string nowStr = subStr.substr(0, i);
@@ -67,7 +67,7 @@ int pi(string &subStr,int nowIndex, vector<int>& cache) {
 			return cost;
 		}
 		string nextStr = subStr.substr(i);
-		cache[nowIndex] = min(cache[nowIndex], pi(nextStr, nowIndex+i,cache) + cost) ;
+		cache[nowIndex] = min(cache[nowIndex], pi(nextStr, nowIndex + i, cache) + cost);
 	}
 	return cache[nowIndex];
 }
@@ -82,8 +82,7 @@ int main()
 		cin >> inp;
 		vector<int> cache(inp.size(), MAX);
 
-		cout << pi(inp, 0, cache) <<endl;
-		
+		cout << pi(inp, 0, cache) << endl;
+
 	}
 }
-
