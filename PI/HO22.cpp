@@ -8,15 +8,7 @@ char c[10005];
 int m[10005];
 int l;
 
-
-// s : 시작 위치, n : 끝 위치
-int dp(int s, int n) {
-    // 문자열 길이보다 클 때
-    if (n > l) {
-        return 9999999;
-    }
-
-
+int lv(int s, int n){
     // 난이도 계산
     int lv = 0;
     char p[2];
@@ -55,9 +47,10 @@ int dp(int s, int n) {
                     break;
                 }
             }
-        } else if (abs(r) == abs(atoi(q) - atoi(p))) {
+        }
+        else if (abs(r) == abs(atoi(q) - atoi(p))) {
             if (lv == 0) {
-                if (y != r * -1 && y != 0) {
+                if(y != r*-1 && y != 0){
                     lv = 10;
                     break;
                 }
@@ -67,29 +60,40 @@ int dp(int s, int n) {
                 lv = 10;
                 break;
             }
-        } else {
+        }
+        else{
             lv = 10;
             break;
         }
         r = atoi(q) - atoi(p);
     }
+    return lv;
+}
 
-    if ((m[n - 1] > m[s - 1] + lv) || m[n - 1] == 0) {
-        m[n - 1] = m[s - 1] + lv;
-    } else {
-        return m[n - 1];
+// s : 시작 위치, n : 끝 위치
+int dp(int s) {
+    // 문자열 길이보다 클 때
+
+    // 값이 이미 있을 때
+    if (s == l){
+        return 0;
     }
 
-//    printf(" %d ~ %d", s, n-1);
-//    printf(" %d : %d\n", m[n-1], lv);
+    int& ret = m[s];
 
-    if (n == l) {
-//        printf("..%d..", m[n-1]);
-        return m[n - 1];
+    if (ret != -1){
+        return ret;
+    }
+    ret = 9999999;
+    for(int L = 3; L <= 5; ++L){
+        if(s + L <= l){
+            ret = min(ret, dp(s+L) + lv(s, s+L));
+        }
     }
 
+//    ret = min(min(min(dp(n, n+5), dp(n, n+4)), dp(n, n+3)) + lv, ret);
 
-    return min(min(dp(n, n + 5), dp(n, n + 4)), dp(n, n + 3)) + lv;
+    return ret;
 }
 
 int main(int argc, const char *argv[]) {
@@ -101,9 +105,8 @@ int main(int argc, const char *argv[]) {
     for (int i = 0; i < n; ++i) {
         scanf("%s", c);
         l = strlen(c);
-        fill_n(m, l, 0);
-        dp(0, 0);
-        printf("%d ", m[l - 1]);
+        fill_n(m, l, -1);
+        printf("%d ", dp(0));
 //        for(int j = 0; j < l; ++j){
 //            printf("%d ", m[j]);
 //        }
