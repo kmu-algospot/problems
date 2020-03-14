@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
@@ -8,14 +9,15 @@ int l[105], d[105], dd[105];
 
 bool compare(int a, int b) {
     if (d[a] == d[b]) {
-        return d[b] > d[a];
+        return false;
     }
     return d[a] > d[b];
 }
 
 int main() {
-    int c, n, s, hap = 0, answer = 0, r = 0;
+    int c, n, s, hap = 0, r = 0;
     float avr = 0;
+    long long answer = 0;
 
     scanf("%d", &c);
     for (int i = 0; i < c; ++i) {
@@ -30,12 +32,14 @@ int main() {
             dd[j] = j;
         }
 
-        sort(dd + 1, dd + n - 1, compare);
-        sort(dd + 1, dd + s);
-
         if(n < s){
             s = n;
         }
+
+        sort(dd + 1, dd + n, compare);
+        sort(dd + 1, dd + s);
+
+
 
         dd[0] = 0;
         dd[s] = n;
@@ -43,7 +47,6 @@ int main() {
 
         for (int j = 0; j < s; ++j) {
             hap = 0;
-            avr = 0;
             for (int k = dd[j]; k < dd[j + 1]; ++k) {
                 hap += l[k];
             }
@@ -57,5 +60,5 @@ int main() {
         printf("%d\n", answer);
         answer = 0;
     }
-
 }
+
