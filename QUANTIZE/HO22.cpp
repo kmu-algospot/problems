@@ -39,11 +39,8 @@ int main() {
         sort(dd + 1, dd + n, compare);
         sort(dd + 1, dd + s);
 
-
-
         dd[0] = 0;
         dd[s] = n;
-
 
         for (int j = 0; j < s; ++j) {
             hap = 0;
@@ -54,11 +51,12 @@ int main() {
             avr = (float) hap / (dd[j + 1] - dd[j]);
             r = floor(avr + 0.5);
             for (int k = dd[j]; k < dd[j + 1]; ++k) {
+
                 answer += (l[k] - r) * (l[k] - r);
+
             }
         }
         printf("%d\n", answer);
         answer = 0;
     }
 }
-
