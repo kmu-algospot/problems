@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 
 const int MAX = 100;
 int map[MAX][MAX];
@@ -12,23 +13,20 @@ int cache2[MAX][MAX];
 
 int triangle(int r, int c,int triangleSize) {
 
-
-    if ( r == triangleSize - 1 )
-        return map[r][c];
-
     if ( cache[r][c] != -1 )
         return cache[r][c];
 
-    return cache[r][c] = std::max(triangle(r+1, c, triangleSize), triangle(r+1, c+1,triangleSize)) + map[r][c];
+    if ( r == triangleSize - 1 )
+        return cache[r][c] = map[r][c];
 
+    return cache[r][c] = std::max(triangle(r+1, c, triangleSize), triangle(r+1, c+1,triangleSize)) + map[r][c];
 }
+
 int triangleCnt(int y, int x, int triangleSize) {
 
-    if (cache2[y][x] != -1) return cache2[y][x];
+    if (cache2[y][x] != -1)             return cache2[y][x];
 
-    if (y == triangleSize - 1) {
-        return 1;
-    }
+    if (y == triangleSize - 1)          return 1;
 
     int pre = cache[y + 1][x];
     int next = cache[y + 1][x + 1];
@@ -56,16 +54,12 @@ int main(){
     while(testCase--) {
         scanf("%d", &triangleSize);
 
-        for (int i = 0; i < triangleSize; i++) {
-            for (int j = 0; j <=i ; j++) {
-                scanf("%d", &map[i][j]);
-            }
-        }
+        memset(cache, -1, sizeof(cache));
+        memset(cache2, -1, sizeof(cache2));
 
-        for (int i = 0; i < triangleSize; i++ ) {
-            for (int j = 0; j < triangleSize; j++ ) {
-                cache[i][j] = -1;
-                cache2[i][j] = -1;
+        for (int i = 0; i < triangleSize; i++) {
+            for (int j = 0; j <= i ; j++) {
+                scanf("%d", &map[i][j]);
             }
         }
 
