@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-
+const int MAX =9999999999;
 int main(){
     int n,m;
 
@@ -11,7 +11,7 @@ int main(){
     for(int i=0; i<n; i++){
         cin>> arr[i];
     }
-    int ret = 2000000000;
+    int ret = MAX;
     int start, end =0;
 
     int sum = arr[0];
@@ -35,7 +35,7 @@ int main(){
         }
     }
 
-    if(ret == 2000000000){
+    if(ret == MAX){
         cout<<0;
     } else{
         cout<<ret;
