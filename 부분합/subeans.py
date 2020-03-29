@@ -1,28 +1,29 @@
 N, S = map(int, input().split())
 A = list(map(int, input().split()))
 
-#print(A)
-start_idx=0
-len=0
-min=1000000
-sum=0
-cnt=0
-while(start_idx<N):
-    for j in range(start_idx,N):
-        if (sum >= S):
-            #print(cnt)
-            len=cnt
-            sum=0
-            cnt=0
-            start_idx+=1
-            break
+# 먼저 0~n까지의 합을 구해줌
+sum= [0] * (N + 1)
+for i in range(1, N + 1):
+    sum[i] = sum[i - 1] + A[i - 1]
+
+
+answer = 1000001
+start = 0
+end = 1
+
+while (start != N):
+    if sum[end] - sum[start] >= S:
+        answer=min(answer,end-start)
+        start += 1
+    else:
+        if end != N:
+            end += 1
         else:
-            #print(sum)
-            sum += A[j]
-            cnt+=1
-
-    if (min>len):
-        min=len
+            start += 1
 
 
-print(min)
+############################이거없으면 틀림
+if answer != 1000001:
+    print(answer)
+else:
+    print(0)
