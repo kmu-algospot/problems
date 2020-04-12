@@ -5,7 +5,7 @@ using namespace std;
 const int MOD = 1000000007;
 int cache[101];
 int tiling(int width){
-    if(width <= 1)return width;
+    if(width <= 1)return 1;
     if(cache[width] != -1) return cache[width];
     return cache[width] = (tiling(width-2) + tiling(width-1)) % MOD;
 }
@@ -28,7 +28,13 @@ int main() {
                 cout << tiling(N) - tiling(N/2) << endl;
             }
             else{
-                cout << tiling(N) - tiling(N/2-1) << endl;
+                int all = tiling(N);
+                int sym = (((long long)tiling(N/2-1)) + tiling(N/2)) % MOD;
+                int asym = all - sym;
+                if(asym < 0)
+                    asym += MOD;
+            
+                cout << asym << endl;
             }
         }
     }
