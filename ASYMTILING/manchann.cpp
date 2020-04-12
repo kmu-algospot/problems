@@ -13,7 +13,7 @@ int main(){
         int num;
         cin>>num;
         if(num == 1){
-            cout<<1<<"\n";
+            cout<<0<<"\n";
             continue;
         } else if(num == 2){
             cout<<0<<"\n";
