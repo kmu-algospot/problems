@@ -9,7 +9,7 @@ def solution(n):
             
         answer = 0
         ret = cache
-        for Next in range(1,n-top + 1): # 맨 위에 1개가 있을 때 부터 top - n개가 있을 때 까지
+        for Next in range(1,n-top + 1): # 맨 위에 1개가 있을 때 부터 n - top개가 있을 때 까지
             answer += (Next+top) * poly(Next, n-1)) % 10000000
         cache[n][top] = answer
         return answer
