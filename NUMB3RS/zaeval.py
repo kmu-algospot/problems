@@ -6,8 +6,7 @@ while C:
 
     mapp = []
     adj_map = []
-    towns = [-1 for i in range(N)]
-
+    towns = [[-1 for j in range(D+1)] for i in range(N)]
     queue = [{"town": P, "level": 1}]
 
     for i in range(N):
@@ -22,21 +21,25 @@ while C:
     while len(queue) > 0:
         top = queue[0]
         queue = queue[1:]
+        nowTown = top["town"]
+        nowLevel = top["level"]
 
-        for node in adj_map[top["town"]]["list"]:
-            size = adj_map[top["town"]]["len"]
-            nowP = towns[top["town"]]
-            if top["level"] == 1:
+        for node in adj_map[nowTown]["list"]:
+            size = adj_map[nowTown]["len"]
+            nowP = towns[nowTown][nowLevel-1]
+
+            if nowLevel == 1:
                 nowP = 1
-            if towns[node] != -1:
-                towns[node] += nowP * 1 / size
+
+            if towns[node][nowLevel] != -1:
+                towns[node][nowLevel] += nowP * 1 / size
             else:
-                towns[node] = nowP * 1 / size
+                towns[node][nowLevel] = nowP * 1 / size
 
             if top["level"] + 1 <= D:
                 queue.append({"town": node, "level": top["level"] + 1})
     T = int(input())
 
     for Q in map(lambda x: int(x), input().split()):
-        print(towns[Q], end=" ")
+        print(0 if towns[Q][D] == -1 else towns[Q][D], end=" ")
     print()
