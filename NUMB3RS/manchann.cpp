@@ -17,7 +17,7 @@ double search(int here, int days){
 	for (int there =0; there <n; ++there)
 	{
 		if (connected[here][there]) {
-			ret += solve(there, days-1) / deg[there];
+			ret += search(there, days-1) / deg[there];
 		}
 	}
 	return ret;
