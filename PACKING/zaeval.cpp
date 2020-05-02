@@ -9,16 +9,34 @@ struct Thing {
 	int size;
 	int value;
 };
+void tracking(int ti, int w, vector<vector<int>> & from, vector<int> & ret) {
+	int nextW = from[ti][w];
+
+	if (ti == 0)
+		return;
+
+	if (nextW == -1) {
+		nextW = w;
+	}
+	else {
+		ret.push_back(ti);
+	}
+
+	tracking(ti - 1, nextW, from,ret);
+}
 int main() {
 	int C;
 	cin >> C;
 	while (C--) {
-		int N, W, answer = 0, maxValue = -1;
+		int N, W;
 		cin >> N >> W;
 
 		vector<Thing*> things;
-		vector<int> carrier(W+1,0);
-		vector<set<int>> selected(W+1, set<int>());
+		vector<vector<int>> cache(2,vector<int>(W+1, 0));
+		vector<vector<int>> from(N,vector<int>(W + 1, -1));
+		vector<int> carrior;
+
+		things.push_back(NULL);
 
 		for (int ti = 0; ti < N; ++ti) {
 			Thing* thing = new Thing();
@@ -26,30 +44,28 @@ int main() {
 			
 			things.push_back(thing);
 		}
-		for (int w = 0; w <= W; ++w) {
-			for (int ti = 0; ti < N; ++ti) {
-				if (w >= things[ti]->size 
-					&& carrier[w] < carrier[w - things[ti]->size] + things[ti]->value 
-					&& selected[w - things[ti]->size].find(ti) == selected[w - things[ti]->size].end()) {
-					carrier[w] = carrier[w - things[ti]->size] + things[ti]->value;
-					
-					selected[w].clear();
-					for(set<int>::iterator iter = selected[w - things[ti]->size].begin(); iter != selected[w - things[ti]->size].end();++iter){
-						selected[w].insert(*iter);
-					}
-
-					selected[w].insert(ti);
-					if (maxValue < carrier[w]) {
-						maxValue = carrier[w];
-						answer = w;
+		for (int ti = 1; ti < N; ++ti) {
+			for (int w = 0; w <= W; ++w) {
+				cache[ti%2][w] = cache[!(ti%2)][w];
+				if (w - things[ti]->size >= 0) {
+					if(cache[ti%2][w] < cache[!(ti%2)][w - things[ti]->size] + things[ti]->value){
+						from[ti][w] = w - things[ti]->size;
+						cache[ti%2][w] = cache[!(ti % 2)][w - things[ti]->size] + things[ti]->value;
 					}
 				}
 			}
 		}
-		cout << carrier[answer] << " " << selected[answer].size() << endl;
-		for (set<int>::iterator iter = selected[answer].begin(); iter != selected[answer].end(); ++iter) {
-			cout<<things[*iter]->name<<endl;
+
+		tracking(N - 1, W, from, carrior);
+
+		sort(carrior.begin(), carrior.end());
+
+		cout << cache[(N-1)%2][W] << " " << carrior.size() << endl;
+		for (int i = 0; i < carrior.size(); ++i) {
+			cout << things[carrior[i]]->name << endl;
 		}
+		
+
 		for (vector<Thing*>::iterator iter = things.begin(); iter != things.end();++iter) {
 			delete* iter;
 		}
